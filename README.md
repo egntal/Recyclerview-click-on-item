@@ -10,5 +10,4 @@ Its easy and simple. Just 4 Functions in the NewAdapter and 4 Functions in the S
 
 Enjoy.
 
-![Recyclerview-click-on-item](http://www.androidhive.info/wp-content/uploads/2016/01/android-recycler-view-on-item-click-listener.png)
 
