@@ -1,0 +1,74 @@
+package com.skyapps.notes;
+
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity {
+    private List<Movie> movieList = new ArrayList<>();
+    private RecyclerView recyclerView;
+    private MovieAdapter mAdapter;
+    private MovieDB helper;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        helper = new MovieDB(this);
+        mAdapter = new MovieAdapter(movieList, this);
+
+        recyclerView.setHasFixedSize(true);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(mAdapter);
+
+
+
+        /*recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                Movie movie = movieList.get(position);
+                Toast.makeText(getApplicationContext(), movie.getTitle() + " is selected!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }) {
+        });*/
+
+        prepareMovieData();
+    }
+
+    private void prepareMovieData() {
+        /*//Add Item YourSelf :
+        Movie movie = new Movie("Mad Max: Fury Road", "Action & Adventure", "2015");
+        movieList.add(movie);
+
+        movie = new Movie("Inside Out", "Animation, Kids & Family", "2015");
+        movieList.add(movie);*/
+
+        //Add Item To DataBase , After It - To The RecyclerView ...
+
+        Movie movie = new Movie("1 Mad Max: Fury Road", "Action & Adventure", "2015");
+        helper.addMovie(movie);
+        movie = new Movie("2 TALMOVIE", "Comedy", "2017");
+        helper.addMovie(movie);
+
+        movieList.addAll(helper.getAllMoviews());
+
+        mAdapter.notifyDataSetChanged();
+    }
+}
+
