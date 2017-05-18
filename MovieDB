@@ -1,0 +1,84 @@
+package com.skyapps.notes;
+
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+import java.util.ArrayList;
+
+public class MovieDB extends SQLiteOpenHelper {
+
+    public MovieDB(Context context) {
+        super(context, "tal.db", null, 1);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase sqLiteDatabase) {
+
+        sqLiteDatabase.execSQL(
+                "CREATE TABLE movie ( id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, year TEXT, genre TEXT );"
+        );
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+
+    }
+
+    public void addMovie(Movie movie){
+
+        ContentValues values = new ContentValues();
+        values.put("title" , movie.getTitle());
+        values.put("year" , movie.getYear());
+        values.put("genre" , movie.getGenre());
+
+        SQLiteDatabase db = getWritableDatabase();
+        db.insert("movie" , null , values);
+        db.close();
+
+
+    }
+
+    public ArrayList<Movie> getAllMoviews (){
+
+        SQLiteDatabase db = getReadableDatabase();
+        ArrayList<Movie> movie = new ArrayList<Movie>();
+
+        Cursor c = db.query("movie", null, null, null, null, null, null);
+        while (c.moveToNext()){
+            long id = c.getLong( c.getColumnIndex("id") );
+            String title = c.getString(c.getColumnIndex("title"));
+            String year = c.getString(c.getColumnIndex("year"));
+            String genre = c.getString(c.getColumnIndex("genre"));
+
+            movie.add(new Movie(id, title,year,genre));
+
+        }
+
+        return movie;
+
+    }
+
+    /*public void updateNote(Note n){
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("title" , n.getTitle());
+        values.put("details" , n.getDetails());
+        values.put("date" , n.getDate());
+
+        db.update("note", values, "_id="+ n.getId() , null);
+
+
+    }*/
+
+    public void removeMovie(long id){
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete("movie", "id" + "=" + id, null);
+        db.close();
+
+    }
+
+}
